@@ -81,23 +81,23 @@ const App = () => {
           <button onClick={isPayBill} className="button ">Adicionar amigo(a)</button>
         </ul>
       </aside>
-      {formAddFriend &&
-        <form className="form-split-bill">
-          <h2>Rache a conta com Antonio</h2>
-          <label >💰 Valor Total
-            <input type="text" />
-          </label>
-          <label>🤸‍♂️ Seus gastos
-            <input type="text" />
-          </label>
-          <label>🤑 Quem vai pagar
-            <select name="">
-              <option >Você</option>
-              <option >Antonio</option>
-            </select>
-          </label>
-          <button className="button">Rachar Conta</button>
-        </form>}
+
+      <form className="form-split-bill">
+        <h2>Rache a conta com Antonio</h2>
+        <label >💰 Valor Total
+          <input type="number" />
+        </label>
+        <label>🤸‍♂️ Seus gastos
+          <input type="text" />
+        </label>
+        <label>🤑 Quem vai pagar
+          <select name="">
+            <option value='you'>Você</option>
+            <option value='nome'>Antonio</option>
+          </select>
+        </label>
+        <button className="button">Rachar Conta</button>
+      </form>
     </main>
   </div >
 }
