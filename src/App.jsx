@@ -4,32 +4,38 @@ const friends = [
   {
     img: './friends/alessandra-48.jpg',
     name: 'joao',
-    status: 'deve',
+    balance: 10,
     id: crypto.randomUUID()
   },
   {
     img: './friends/antonio-48.jpg',
     name: 'jose',
-    status: 'paga',
+    balance: 7,
     id: crypto.randomUUID()
   },
   {
     img: './friends/renata-48.jpg',
     name: 'maria',
-    status: 'nada',
+    balance: 70,
     id: crypto.randomUUID()
   },
 ]
+
+const getMsgInfo = balance => balance < 0
+  ? { message: `Você deve ${Math.abs(balance)} reais`, color: 'red-debit' }
+  : balance > 0
+    ? { message: `Te deve ${balance} reais`, color: 'green-credit' }
+    : { message: 'Estão quites', color: 'white-neutral' }
 
 const App = () => {
   const [formAddFriend, setFormAddFriend] = useState(false)
   const [formPayBill, setFormPayBill] = useState(false)
 
-  const isAddFriend = (id) => {
-    const friendSelected = friends.filter(friend => friend.id === id)
-    return friendSelected ? setFormAddFriend(!formAddFriend) : formAddFriend
+  // const isAddFriend = (id) => {
+  //   const friendSelected = friends.filter(friend => friend.id === id)
+  //   return friendSelected ? setFormAddFriend(!formAddFriend) : formAddFriend
 
-  }
+  // }
 
 
   const isPayBill = () => setFormPayBill(!formPayBill)
@@ -45,37 +51,36 @@ const App = () => {
       <img src="./logo-racha-conta.png" alt="logo" />
     </header>
     <main className="app ">
-      <ul className="sidebar">
-        {friends.map(({ id, name, status, img }) => (
-          <li
-            key={id}
-          >
-            <img src={img} alt="logo" />
-            <h3>{name}</h3>
-            <p>{status}</p>
-            <button
-              className={!formAddFriend ? "button" : "button button-close"}
-              onClick={() => isAddFriend(id)}
-            >
-              {!formAddFriend ? 'Selecionar' : 'Fechar'}
-            </button>
-          </li>
-        ))}
+      <aside className="sidebar">
+        <ul>
+          {friends.map((friend) => {
+            const { message, color } = getMsgInfo(friend.balance)
 
-        {formPayBill &&
-          <form className="form-add-friend" onSubmit={addFriend}>
-            <label>🧍 Nome
-              <input type="text" placeholder="nome ..." />
-            </label>
-            <label>📷 Foto
-              <input type="text" placeholder="..." />
-            </label>
-            <button className="button">Adicionar</button>
-          </form>
-        }
+            return (
+              <li key={friend.id}>
+                <img src={friend.img} alt={`Foto de ${friend.name}`} />
+                <h3>{friend.name}</h3>
+                <p className={color}>{message}</p>
+                <button className="button">Selecionar</button>
+              </li>
+            )
+          })}
 
-        <button onClick={isPayBill} className="button ">Adicionar amigo(a)</button>
-      </ul>
+          {formPayBill &&
+            <form className="form-add-friend" onSubmit={addFriend}>
+              <label>🧍 Nome
+                <input type="text" placeholder="nome ..." />
+              </label>
+              <label>📷 Foto
+                <input type="text" placeholder="..." />
+              </label>
+              <button className="button">Adicionar</button>
+            </form>
+          }
+
+          <button onClick={isPayBill} className="button ">Adicionar amigo(a)</button>
+        </ul>
+      </aside>
       {formAddFriend &&
         <form className="form-split-bill">
           <h2>Rache a conta com Antonio</h2>
