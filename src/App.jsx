@@ -82,6 +82,7 @@ const App = () => {
 
     setPhotoFriend('')
     setNameFriend('')
+    setAddNewFriend(null)
   }
 
   const handleChangeNameFriend = (e) => setNameFriend(e.target.value)
