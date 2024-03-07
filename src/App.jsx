@@ -35,6 +35,9 @@ const App = () => {
   const [mySpend, setMySpend] = useState('')
   const [whoWillPay, setWhoWillPay] = useState('you')
 
+  const [nameFriend, setNameFriend] = useState('')
+  const [photoFriend, setPhotoFriend] = useState('')
+
   const handleClickFriend = friend => setSelectedFriend(p => p?.id === friend.id ? null : friend)
   const handleChangeBill = e => setTotalBill(e.target.value)
   const handleChangeMySpend = e => setMySpend(e.target.value)
@@ -53,6 +56,7 @@ const App = () => {
       }
       : friend
     ))
+
 
     //     Adicione também o logo na interface.
 
@@ -73,13 +77,26 @@ const App = () => {
 
   const handleSubmitFriend = (e) => {
     e.preventDefault()
-    const [nome, foto] = e.target.elements
-    initialsFriends.push({ name: nome.value, img: `./friends/${foto.value}-48.jpg`, balance: 0, id: crypto.randomUUID() })
 
-    // console.log(e.target.elements, nome.value, foto.value)
 
-    setAddNewFriend(false)
+    setFriends(prev => (
+      [
+        ...prev,
+        {
+          img: photoFriend,
+          name: nameFriend,
+          balance: 0,
+          id: crypto.randomUUID()
+        }
+      ]
+    ))
+
+    setPhotoFriend('')
+    setNameFriend('')
   }
+
+  const handleChangeNameFriend = (e) => setNameFriend(e.target.value)
+  const handleChangePhotoFriend = (e) => setPhotoFriend(e.target.value)
 
   return < div >
     <header className="header">
@@ -109,10 +126,10 @@ const App = () => {
         </ul>
         {addNewFriend && <form onSubmit={handleSubmitFriend} className="form-add-friend">
           <label>🧍‍♂️ Nome
-            <input type="text" placeholder="adicione um amigo ..." />
+            <input type="text" value={nameFriend} onChange={handleChangeNameFriend} placeholder="adicione um amigo ..." />
           </label>
           <label >📷 Foto
-            <input type="text" placeholder="selecione uma foto ..." />
+            <input type="text" value={photoFriend} onChange={handleChangePhotoFriend} placeholder="selecione uma foto ..." />
           </label>
           <button className="button">Adicionar</button>
         </form>
