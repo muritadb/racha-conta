@@ -29,6 +29,7 @@ const getMsgInfo = balance => balance < 0
 
 const App = () => {
   const [friends, setFriends] = useState(initialsFriends)
+  const [addNewFriend, setAddNewFriend] = useState(false)
   const [selectedFriend, setSelectedFriend] = useState(null)
   const [totalBill, setTotalBill] = useState('')
   const [mySpend, setMySpend] = useState('')
@@ -39,6 +40,7 @@ const App = () => {
   const handleChangeMySpend = e => setMySpend(e.target.value)
   const handleChangeWhoWillPay = e => setWhoWillPay(e.target.value)
 
+  const handleClickAddFriend = () => setAddNewFriend(p => !p)
   const handleSubmitShareBill = e => {
     e.preventDefault()
 
@@ -51,6 +53,16 @@ const App = () => {
       }
       : friend
     ))
+
+    //     Adicione também o logo na interface.
+
+    // Em seguida, para facilitar a manutenção do projeto, faz sentido que os próximos passos sejam:
+
+    // - Quebrar o código em componentes;
+    // - Identificar onde os estados devem ficar;
+    // - Dividir os componentes em arquivos.
+
+    // Assim que fizer estas implementações, faça o deploy para produção.
 
     //RESET DO FORM DEPOIS DE ENVIAR OS DADOS 
     setSelectedFriend(null)
@@ -85,6 +97,12 @@ const App = () => {
             )
           })}
         </ul>
+        <button
+          onClick={handleClickAddFriend}
+          className={`button ${addNewFriend ? 'button-close' : ''}`}
+        >
+          {addNewFriend ? 'Fechar' : 'Adicionar amigo(a)'}
+        </button>
       </aside>
 
       {selectedFriend && <form onSubmit={handleSubmitShareBill} className="form-split-bill">
