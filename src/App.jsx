@@ -58,17 +58,6 @@ const App = () => {
     ))
 
 
-    //     Adicione também o logo na interface.
-
-    // Em seguida, para facilitar a manutenção do projeto, faz sentido que os próximos passos sejam:
-
-    // - Quebrar o código em componentes;
-    // - Identificar onde os estados devem ficar;
-    // - Dividir os componentes em arquivos.
-
-    // Assim que fizer estas implementações, faça o deploy para produção.
-
-    //RESET DO FORM DEPOIS DE ENVIAR OS DADOS 
     setSelectedFriend(null)
     setTotalBill('')
     setMySpend('')
@@ -79,7 +68,7 @@ const App = () => {
     e.preventDefault()
 
 
-    setFriends(prev => (
+    setFriends(prev =>
       [
         ...prev,
         {
@@ -89,7 +78,7 @@ const App = () => {
           id: crypto.randomUUID()
         }
       ]
-    ))
+    )
 
     setPhotoFriend('')
     setNameFriend('')
