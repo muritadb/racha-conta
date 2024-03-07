@@ -27,6 +27,88 @@ const getMsgInfo = balance => balance < 0
     ? { message: `Te deve ${balance} reais`, color: 'green-credit' }
     : { message: 'Estão quites', color: 'white-neutral' }
 
+
+const ListFriends = ({ friends, selectedFriend, onChangeClickFriend }) => <ul>
+  {friends.map((friend) => {
+    const { message, color } = getMsgInfo(friend.balance)
+    const isSelectedFriend = friend.id === selectedFriend?.id
+
+    return (
+      <li key={friend.id}>
+        <img src={friend.img} alt={`Foto de ${friend.name}`} />
+        <h3>{friend.name}</h3>
+        <p className={color}>{message}</p>
+        <button
+          onClick={() => onChangeClickFriend(friend)}
+          className={`button ${isSelectedFriend ? 'button-close' : ''}`}
+        >
+          {isSelectedFriend ? 'Fechar' : 'Selecionar'}
+        </button>
+      </li>
+    )
+  })}
+</ul>
+
+const FormAddFriend = ({
+  nameFriend,
+  photoFriend,
+  addNewFriend,
+  onSubmitAddFriend,
+  onChangeNameFriend,
+  onChangePhotoFriend
+}) => addNewFriend &&
+  <form onSubmit={onSubmitAddFriend} className="form-add-friend">
+    <label>🧍‍♂️ Nome
+      <input type="text" value={nameFriend} onChange={onChangeNameFriend} placeholder="adicione um amigo ..." />
+    </label>
+    <label >📷 Foto
+      <input type="text" value={photoFriend} onChange={onChangePhotoFriend} placeholder="selecione uma foto ..." />
+    </label>
+    <button className="button">Adicionar</button>
+  </form>
+
+
+const ShowFormAddFriend = ({ onClickAddFriend, addNewFriend }) =>
+  <button
+    onClick={onClickAddFriend}
+    className={`button ${addNewFriend ? 'button-close' : ''}`}
+  >
+    {addNewFriend ? 'Fechar' : 'Adicionar amigo(a)'}
+  </button>
+
+const FormSplitBill = ({
+  onSubmitShareBill,
+  selectedFriend,
+  totalBill,
+  onChangeBill,
+  mySpend,
+  onChangeMySpend,
+  whoWillPay,
+  onChangeWhoWillPay
+}) => selectedFriend &&
+  <form onSubmit={onSubmitShareBill} className="form-split-bill">
+    <h2>Rache a conta com {selectedFriend.name}</h2>
+    <label >💰 Valor Total
+      <input value={totalBill} onChange={onChangeBill} type="number" />
+    </label>
+    <label>🤸‍♂️ Seus gastos
+      <input value={mySpend} onChange={onChangeMySpend} type="number" />
+    </label>
+    <label>🤑 Quem vai pagar
+      <select value={whoWillPay} onChange={onChangeWhoWillPay}>
+        <option value='you'>Você</option>
+        <option value={selectedFriend.name}>{selectedFriend.name}</option>
+      </select>
+    </label>
+    <button className="button">Rachar Conta</button>
+  </form>
+
+const Logo = () => {
+  return <header className="header">
+    <img src="./logo-racha-conta.png" alt="logo" />
+  </header>
+}
+
 const App = () => {
   const [friends, setFriends] = useState(initialsFriends)
   const [addNewFriend, setAddNewFriend] = useState(false)
@@ -58,17 +140,6 @@ const App = () => {
     ))
 
 
-    //     Adicione também o logo na interface.
-
-    // Em seguida, para facilitar a manutenção do projeto, faz sentido que os próximos passos sejam:
-
-    // - Quebrar o código em componentes;
-    // - Identificar onde os estados devem ficar;
-    // - Dividir os componentes em arquivos.
-
-    // Assim que fizer estas implementações, faça o deploy para produção.
-
-    //RESET DO FORM DEPOIS DE ENVIAR OS DADOS 
     setSelectedFriend(null)
     setTotalBill('')
     setMySpend('')
@@ -78,8 +149,11 @@ const App = () => {
   const handleSubmitFriend = (e) => {
     e.preventDefault()
 
+    if (nameFriend === '' || photoFriend === '') {
+      return
+    }
 
-    setFriends(prev => (
+    setFriends(prev =>
       [
         ...prev,
         {
@@ -89,77 +163,51 @@ const App = () => {
           id: crypto.randomUUID()
         }
       ]
-    ))
+    )
 
     setPhotoFriend('')
     setNameFriend('')
+    setAddNewFriend(null)
   }
 
-  const handleChangeNameFriend = (e) => setNameFriend(e.target.value)
-  const handleChangePhotoFriend = (e) => setPhotoFriend(e.target.value)
+  const handleChangeNameFriend = e => setNameFriend(e.target.value)
+  const handleChangePhotoFriend = e => setPhotoFriend(e.target.value)
 
-  return < div >
-    <header className="header">
-      <img src="./logo-racha-conta.png" alt="logo" />
-    </header>
+  return <>
+    <Logo />
     <main className="app ">
       <aside className="sidebar">
-        <ul>
-          {friends.map((friend) => {
-            const { message, color } = getMsgInfo(friend.balance)
-            const isSelectedFriend = friend.id === selectedFriend?.id
+        <ListFriends
+          friends={friends}
+          selectedFriend={selectedFriend}
+          onChangeClickFriend={handleClickFriend}
+        />
+        <FormAddFriend
+          addNewFriend={addNewFriend}
+          nameFriend={nameFriend}
+          photoFriend={photoFriend}
+          onSubmitAddFriend={handleSubmitFriend}
+          onChangeNameFriend={handleChangeNameFriend}
+          onChangePhotoFriend={handleChangePhotoFriend}
+        />
 
-            return (
-              <li key={friend.id}>
-                <img src={friend.img} alt={`Foto de ${friend.name}`} />
-                <h3>{friend.name}</h3>
-                <p className={color}>{message}</p>
-                <button
-                  onClick={() => handleClickFriend(friend)}
-                  className={`button ${isSelectedFriend ? 'button-close' : ''}`}
-                >
-                  {isSelectedFriend ? 'Fechar' : 'Selecionar'}
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-        {addNewFriend && <form onSubmit={handleSubmitFriend} className="form-add-friend">
-          <label>🧍‍♂️ Nome
-            <input type="text" value={nameFriend} onChange={handleChangeNameFriend} placeholder="adicione um amigo ..." />
-          </label>
-          <label >📷 Foto
-            <input type="text" value={photoFriend} onChange={handleChangePhotoFriend} placeholder="selecione uma foto ..." />
-          </label>
-          <button className="button">Adicionar</button>
-        </form>
-        }
-        <button
-          onClick={handleClickAddFriend}
-          className={`button ${addNewFriend ? 'button-close' : ''}`}
-        >
-          {addNewFriend ? 'Fechar' : 'Adicionar amigo(a)'}
-        </button>
+        <ShowFormAddFriend
+          onClickAddFriend={handleClickAddFriend}
+          addNewFriend={addNewFriend}
+        />
       </aside>
-
-      {selectedFriend && <form onSubmit={handleSubmitShareBill} className="form-split-bill">
-        <h2>Rache a conta com {selectedFriend.name}</h2>
-        <label >💰 Valor Total
-          <input value={totalBill} onChange={handleChangeBill} type="number" />
-        </label>
-        <label>🤸‍♂️ Seus gastos
-          <input value={mySpend} onChange={handleChangeMySpend} type="number" />
-        </label>
-        <label>🤑 Quem vai pagar
-          <select value={whoWillPay} onChange={handleChangeWhoWillPay}>
-            <option value='you'>Você</option>
-            <option value={selectedFriend.name}>{selectedFriend.name}</option>
-          </select>
-        </label>
-        <button className="button">Rachar Conta</button>
-      </form>}
+      <FormSplitBill
+        onSubmitShareBill={handleSubmitShareBill}
+        selectedFriend={selectedFriend}
+        totalBill={totalBill}
+        onChangeBill={handleChangeBill}
+        mySpend={mySpend}
+        onChangeMySpend={handleChangeMySpend}
+        whoWillPay={whoWillPay}
+        onChangeWhoWillPay={handleChangeWhoWillPay}
+      />
     </main>
-  </div >
+  </>
 }
 
 export { App }
