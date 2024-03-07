@@ -71,6 +71,16 @@ const App = () => {
     setWhoWillPay('you')
   }
 
+  const handleSubmitFriend = (e) => {
+    e.preventDefault()
+    const [nome, foto] = e.target.elements
+    initialsFriends.push({ name: nome.value, img: `./friends/${foto.value}-48.jpg`, balance: 0, id: crypto.randomUUID() })
+
+    // console.log(e.target.elements, nome.value, foto.value)
+
+    setAddNewFriend(false)
+  }
+
   return < div >
     <header className="header">
       <img src="./logo-racha-conta.png" alt="logo" />
@@ -97,6 +107,16 @@ const App = () => {
             )
           })}
         </ul>
+        {addNewFriend && <form onSubmit={handleSubmitFriend} className="form-add-friend">
+          <label>🧍‍♂️ Nome
+            <input type="text" placeholder="adicione um amigo ..." />
+          </label>
+          <label >📷 Foto
+            <input type="text" placeholder="selecione uma foto ..." />
+          </label>
+          <button className="button">Adicionar</button>
+        </form>
+        }
         <button
           onClick={handleClickAddFriend}
           className={`button ${addNewFriend ? 'button-close' : ''}`}
