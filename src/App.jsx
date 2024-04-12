@@ -1,18 +1,20 @@
 import { useState } from "react"
-import {Logo} from './components/logo'
-import {FormAddFriend} from './components/form-add-friend'
-import { FormSplitBill} from './components/form-split-bill'
-import {ListFriends} from './components/list-friend'
-import {ShowFormAddFriend} from './components/show-form-add-friend'
+import { Logo } from './components/logo'
+import { FormAddFriend } from './components/form-add-friend'
+import { FormSplitBill } from './components/form-split-bill'
+import { ListFriends } from './components/list-friend'
+import { ShowFormAddFriend } from './components/show-form-add-friend'
 
 const App = () => {
   const [friends, setFriends] = useState([])
   const [addNewFriend, setAddNewFriend] = useState(false)
   const [selectedFriend, setSelectedFriend] = useState(null)
- 
+
+
+
   const handleClickFriend = friend => setSelectedFriend(p => p?.id === friend.id ? null : friend)
   const handleClickAddFriend = () => setAddNewFriend(p => !p)
- 
+
   const handleSubmitAddFriend = newFriend => {
     setFriends(prev => [...prev, newFriend])
     setAddNewFriend(false)
@@ -32,20 +34,20 @@ const App = () => {
           selectedFriend={selectedFriend}
           onChangeClickFriend={handleClickFriend}
         />
-        <FormAddFriend
+        {addNewFriend && <FormAddFriend
           onSubmitAddFriend={handleSubmitAddFriend}
           onShowFormAddFriend={addNewFriend}
-        />
+        />}
 
         <ShowFormAddFriend
           onClickAddFriend={handleClickAddFriend}
           addNewFriend={addNewFriend}
         />
       </aside>
-      <FormSplitBill 
-        onSubmitShareBill={handleSubmitShareBill} 
-        selectedFriend={selectedFriend} 
-      />
+      {selectedFriend && <FormSplitBill
+        onSubmitShareBill={handleSubmitShareBill}
+        selectedFriend={selectedFriend}
+      />}
     </main>
   </>
 }

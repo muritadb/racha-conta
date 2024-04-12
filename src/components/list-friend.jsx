@@ -11,7 +11,7 @@ const ListFriends = ({ friends, selectedFriend, onChangeClickFriend }) => <ul>
     const isSelectedFriend = friend.id === selectedFriend?.id
 
     return (
-      <li key={friend.id}>
+  <li key={friend.id}>
         <img src={friend.img} alt={`Foto de ${friend.name}`} />
         <h3>{friend.name}</h3>
         <p className={color}>{message}</p>
